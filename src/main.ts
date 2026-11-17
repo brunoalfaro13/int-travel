@@ -1,5 +1,6 @@
 import TripManager from "./domain/tripManager.ts";
 import City from "./domain/city.ts";
+import Accommodation from "./domain/accommodation.ts";
 
 const manager = new TripManager();
 const form = document.getElementById("city-form") as HTMLFormElement | null;
@@ -9,6 +10,13 @@ const citiesTbody = document.getElementById(
 
 form?.addEventListener("submit", handleCityFormSubmit);
 
+function accommodationCells(city: City): string {
+  const accommodation = city.getAccommodation();
+  if (!accommodation) {
+    return "<td>—</td><td>—</td>";
+  }
+  return `<td>${accommodation.getName()}</td><td>$${accommodation.getCost()}</td>`;
+}
 function renderCities(): void {
   if (!citiesTbody) return;
   citiesTbody.innerHTML = "";
@@ -37,6 +45,12 @@ function renderCities(): void {
 
 function handleCityFormSubmit(e: SubmitEvent): void {
   e.preventDefault();
+  const accName = (
+  document.getElementById("accommodation-name") as HTMLInputElement
+).value;
+const accCost = (
+  document.getElementById("accommodation-cost") as HTMLInputElement
+).value;
   const name = (document.getElementById("city-name") as HTMLInputElement).value;
   const country = (document.getElementById("city-country") as HTMLInputElement)
     .value;
@@ -54,6 +68,7 @@ function handleCityFormSubmit(e: SubmitEvent): void {
     new Date(dateFrom),
     new Date(dateTo),
     notes,
+    city.addAccommodation(new Accommodation(accName, Number(accCost))); 
   );
   if (!city) {
     showToast("Error", "No se pudo crear la ciudad", "danger");
