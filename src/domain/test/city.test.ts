@@ -1,5 +1,7 @@
 import { describe, beforeEach, test, expect } from "vitest";
 import City, { calculateDurationDays } from "../city.ts";
+import Accommodation from "../accommodation.ts";
+
 
 function createCity(): City {
   return new City(
@@ -8,9 +10,9 @@ function createCity(): City {
     new Date("2023-05-01"),
     new Date("2023-05-04"),
     "Notas",
+    new Accommodation("Acom1", 300),
   );
 }
-
 describe("City name", () => {
   let city: City;
   beforeEach(() => {
@@ -24,7 +26,21 @@ describe("City name", () => {
   test("should throw error if city name is empty", () => {
     // TODO: Implementar validación de nombre vacío en la clase City
   });
+
+  test("should throw error if the accommodation is null", () => {
+  expect(() =>
+    city.addAccommodation(null as unknown as Accommodation),
+  ).toThrow("El alojamiento es obligatorio");
 });
+
+test("should throw error if the accommodation is undefined", () => {
+  expect(() =>
+    city.addAccommodation(undefined as unknown as Accommodation),
+  ).toThrow("El alojamiento es obligatorio");
+});
+
+});
+
 
 describe("City country", () => {
   let city: City;
@@ -160,6 +176,8 @@ describe("Duration in days", () => {
       "TestCountry",
       new Date("2023-05-01"),
       new Date("2023-05-01"),
+      "Notas",
+      new Accommodation("Acom1", 300),
     );
     expect(singleDayCity.getDurationDays()).toBe(1);
   });

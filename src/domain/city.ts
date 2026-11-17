@@ -1,9 +1,12 @@
+import Accommodation from "./accommodation";
+
 class City {
   #cityName!: string;
   #country!: string;
   #dateFrom!: Date;
   #dateTo!: Date;
   #notes: string = "";
+  #acommodation!: Accommodation;
 
   constructor(
     cityName: unknown,
@@ -11,6 +14,7 @@ class City {
     dateFrom: unknown,
     dateTo: unknown,
     notes: unknown = "",
+    acommodation: Accommodation
   ) {
     this.setName(cityName);
     this.setCountry(country);
@@ -18,7 +22,21 @@ class City {
     this.setDateFrom(dateFrom);
     this.setDateTo(dateTo);
     this.setNotes(notes);
+    if (acommodation !== undefined) {
+  this.addAccommodation(acommodation);
+}
   }
+
+  addAccommodation(acommodation: Accommodation): void {
+  if (acommodation === null || acommodation === undefined) {
+    throw new Error("El alojamiento es obligatorio");
+  }
+  this.#acommodation = acommodation;
+}
+
+getAccommodation(): Accommodation | undefined {
+  return this.#acommodation;
+}
 
   getCountry(): string {
     return this.#country;
@@ -139,4 +157,6 @@ export function calculateDurationDays(
 }
 
 export default City;
+
+
 
